@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="recipe"
+            type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipes"/>
+        <variable
+            name="iMainActivity"
+            type="com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_16"
+        android:layout_marginRight="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_8"
+        android:onClick="@{() -> iMainActivity.onRecipeNameClick(recipe)}">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:gravity="start|center"
+            android:padding="@dimen/margin_16"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            android:text="@{recipe.name}"/>
+
+    </android.support.v7.widget.CardView>
+</layout>
