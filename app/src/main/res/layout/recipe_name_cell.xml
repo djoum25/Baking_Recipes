@@ -5,7 +5,7 @@
 
         <variable
             name="recipe"
-            type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipes"/>
+            type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe"/>
         <variable
             name="iMainActivity"
             type="com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity"/>
@@ -23,9 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="casual"
-            android:gravity="start|center"
+            android:gravity="end|center"
             android:padding="@dimen/margin_16"
             android:textSize="36sp"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:typeface="serif"
             android:text="@{recipe.name}"/>

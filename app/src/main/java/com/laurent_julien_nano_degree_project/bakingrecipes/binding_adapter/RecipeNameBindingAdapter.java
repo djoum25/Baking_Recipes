@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.adapter.RecipeNameAdapter;
-import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipes;
+import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class RecipeNameBindingAdapter {
 
    @BindingAdapter("recipelist")
-    public static void setRecipeNameList(RecyclerView view, List<Recipes> recipes){
+    public static void setRecipeNameList(RecyclerView view, List<Recipe> recipes){
         Context context = view.getContext();
 
         if (recipes == null){

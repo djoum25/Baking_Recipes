@@ -11,16 +11,16 @@ import android.view.ViewGroup;
 import com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity;
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.RecipeNameCellBinding;
-import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipes;
+import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 
 import java.util.List;
 
 public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.RecipeBindingHolder>{
 
-    private List<Recipes> mRecipes;
+    private List<Recipe> mRecipes;
     private Context mContext;
 
-    public RecipeNameAdapter (Context context, List<Recipes> recipes) {
+    public RecipeNameAdapter (Context context, List<Recipe> recipes) {
         mContext = context;
         mRecipes = recipes;
     }
@@ -36,7 +36,7 @@ public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.Re
 
     @Override
     public void onBindViewHolder (@NonNull RecipeBindingHolder holder, int position) {
-        Recipes recipe = mRecipes.get(position);
+        Recipe recipe = mRecipes.get(position);
         holder.mBinding.setRecipe(recipe);
         holder.mBinding.setIMainActivity((IMainActivity) mContext);
         holder.mBinding.executePendingBindings();
@@ -47,10 +47,11 @@ public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.Re
         return mRecipes.size();
     }
 
-    public class RecipeBindingHolder extends RecyclerView.ViewHolder{
+    class RecipeBindingHolder extends RecyclerView.ViewHolder{
         RecipeNameCellBinding mBinding;
-        public RecipeBindingHolder (View itemView) {
+        RecipeBindingHolder (View itemView) {
             super(itemView);
+            itemView.setBackground(mContext.getResources().getDrawable(R.drawable.recipe_background));
             mBinding = DataBindingUtil.bind(itemView);
         }
     }

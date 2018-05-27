@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipes implements Parcelable {
+public class Recipe implements Parcelable {
 
     private int id;
     private String name;
@@ -87,10 +87,10 @@ public class Recipes implements Parcelable {
         dest.writeString(this.image);
     }
 
-    public Recipes () {
+    public Recipe () {
     }
 
-    protected Recipes (Parcel in) {
+    protected Recipe (Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
         this.ingredients = in.createTypedArrayList(Ingredient.CREATOR);
@@ -100,15 +100,15 @@ public class Recipes implements Parcelable {
         this.image = in.readString();
     }
 
-    public static final Parcelable.Creator<Recipes> CREATOR = new Parcelable.Creator<Recipes>() {
+    public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
         @Override
-        public Recipes createFromParcel (Parcel source) {
-            return new Recipes(source);
+        public Recipe createFromParcel (Parcel source) {
+            return new Recipe(source);
         }
 
         @Override
-        public Recipes[] newArray (int size) {
-            return new Recipes[size];
+        public Recipe[] newArray (int size) {
+            return new Recipe[size];
         }
     };
 }

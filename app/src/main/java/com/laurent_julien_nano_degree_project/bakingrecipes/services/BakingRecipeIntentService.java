@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.google.gson.Gson;
-import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipes;
+import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 import com.laurent_julien_nano_degree_project.bakingrecipes.networkUtil.HttpHelper;
 
@@ -52,16 +52,19 @@ public class BakingRecipeIntentService extends IntentService {
     }
 
     private void handleActionQueryUrl (String url) {
-        List<Recipes> recipesList = new ArrayList<>();
+        List<Recipe> recipesList = new ArrayList<>();
         try {
             Gson gson = new Gson();
-            Recipes [] recipes = gson.fromJson(HttpHelper.connectToUrl(url), Recipes[].class);
+            Recipe[] recipes = gson.fromJson(HttpHelper.connectToUrl(url), Recipe[].class);
             /**
              * recipe id 1 step 5 has the videoUrl in thumbnail
              * but the code can break at  anytime if data change
              */
 
-            for (Recipes recipe : recipes) {
+            if(recipes == null)
+                return;
+
+            for (Recipe recipe : recipes) {
                 for (Step step : recipe.getSteps()) {
                    if (recipe.getId() == 1 && step.getId() == 5){
                        step.setVideoURL(step.getThumbnailURL());

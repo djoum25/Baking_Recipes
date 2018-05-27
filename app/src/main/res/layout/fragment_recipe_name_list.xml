@@ -5,22 +5,22 @@
 
     <data>
         <import type="com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.RecipeNameBindingAdapter"/>
-        <import type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipes"/>
         <import type="java.util.List"/>
+        <import type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe"/>
+
         <variable
             name="recipes"
-            type="List&lt;Recipes>"/>
+            type="List&lt;Recipe>"/>
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragment.RecipeNameList">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recipe_name_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           app:recipelist="@{recipes}"/>
+            app:recipelist="@{recipes}"/>
     </LinearLayout>
 </layout>
