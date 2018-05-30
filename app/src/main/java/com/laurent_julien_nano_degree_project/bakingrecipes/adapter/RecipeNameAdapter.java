@@ -15,7 +15,7 @@ import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 
 import java.util.List;
 
-public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.RecipeBindingHolder>{
+public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.RecipeBindingHolder> {
 
     private List<Recipe> mRecipes;
     private Context mContext;
@@ -47,11 +47,11 @@ public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.Re
         return mRecipes.size();
     }
 
-    class RecipeBindingHolder extends RecyclerView.ViewHolder{
+    class RecipeBindingHolder extends RecyclerView.ViewHolder {
         RecipeNameCellBinding mBinding;
+
         RecipeBindingHolder (View itemView) {
             super(itemView);
-            itemView.setBackground(mContext.getResources().getDrawable(R.drawable.recipe_background));
             mBinding = DataBindingUtil.bind(itemView);
         }
     }

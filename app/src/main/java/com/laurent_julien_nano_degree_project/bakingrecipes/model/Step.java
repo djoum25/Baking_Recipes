@@ -5,11 +5,33 @@ import android.os.Parcelable;
 
 public class Step implements Parcelable {
 
+    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
+        @Override
+        public Step createFromParcel (Parcel source) {
+            return new Step(source);
+        }
+
+        @Override
+        public Step[] newArray (int size) {
+            return new Step[size];
+        }
+    };
     private int id;
     private String shortDescription;
     private String description;
     private String videoURL;
     private String thumbnailURL;
+
+    public Step () {
+    }
+
+    protected Step (Parcel in) {
+        this.id = in.readInt();
+        this.shortDescription = in.readString();
+        this.description = in.readString();
+        this.videoURL = in.readString();
+        this.thumbnailURL = in.readString();
+    }
 
     public int getId () {
         return id;
@@ -51,14 +73,13 @@ public class Step implements Parcelable {
         this.thumbnailURL = thumbnailURL;
     }
 
-    public boolean hasVideo(){
+    public boolean hasVideo () {
         return videoURL.length() > 0;
     }
 
-    public boolean hasthumbnail(){
+    public boolean hasthumbnail () {
         return thumbnailURL.length() > 0;
     }
-
 
     @Override
     public int describeContents () {
@@ -73,27 +94,4 @@ public class Step implements Parcelable {
         dest.writeString(this.videoURL);
         dest.writeString(this.thumbnailURL);
     }
-
-    public Step () {
-    }
-
-    protected Step (Parcel in) {
-        this.id = in.readInt();
-        this.shortDescription = in.readString();
-        this.description = in.readString();
-        this.videoURL = in.readString();
-        this.thumbnailURL = in.readString();
-    }
-
-    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
-        @Override
-        public Step createFromParcel (Parcel source) {
-            return new Step(source);
-        }
-
-        @Override
-        public Step[] newArray (int size) {
-            return new Step[size];
-        }
-    };
 }

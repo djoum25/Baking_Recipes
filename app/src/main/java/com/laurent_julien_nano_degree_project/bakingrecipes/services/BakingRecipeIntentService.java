@@ -61,14 +61,14 @@ public class BakingRecipeIntentService extends IntentService {
              * but the code can break at  anytime if data change
              */
 
-            if(recipes == null)
+            if (recipes == null)
                 return;
 
             for (Recipe recipe : recipes) {
                 for (Step step : recipe.getSteps()) {
-                   if (recipe.getId() == 1 && step.getId() == 5){
-                       step.setVideoURL(step.getThumbnailURL());
-                   }
+                    if (recipe.getId() == 1 && step.getId() == 5) {
+                        step.setVideoURL(step.getThumbnailURL());
+                    }
                 }
                 recipesList.add(recipe);
             }

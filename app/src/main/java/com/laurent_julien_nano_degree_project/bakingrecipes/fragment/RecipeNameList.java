@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.FragmentRecipeNameListBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 import com.laurent_julien_nano_degree_project.bakingrecipes.networkUtil.ConnectionStatus;
@@ -29,25 +30,25 @@ public class RecipeNameList extends Fragment {
         // Required empty public constructor
     }
 
-
-    @Override
-    public void onStart () {
-        super.onStart();
-        if (ConnectionStatus.isDeviceConnected(getContext())){
-            BakingRecipeIntentService.startActionQueryUrl(getContext(), URL_TO_QUERY);
-            EventBus.getDefault().register(this);
-        }else {
-            Toast.makeText(getContext(), "Device is not conected", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         mBinding = FragmentRecipeNameListBinding.inflate(inflater);
+        mBinding.recipeNameListContainer.setBackground(getActivity()
+            .getResources().getDrawable(R.drawable.custom_background));
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onStart () {
+        super.onStart();
+        if (ConnectionStatus.isDeviceConnected(getContext())) {
+            BakingRecipeIntentService.startActionQueryUrl(getContext(), URL_TO_QUERY);
+            EventBus.getDefault().register(this);
+        } else {
+            Toast.makeText(getContext(), "Device is not conected", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onStop () {
@@ -56,8 +57,9 @@ public class RecipeNameList extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void OnrecipeRecive(List<Recipe> recipes){
-        if (recipes == null){
+    public void OnrecipeRecive (List<Recipe> recipes) {
+        mBinding.nameListProgressBar.setVisibility(View.GONE);
+        if (recipes == null) {
             return;
         }
         mBinding.setRecipes(recipes);

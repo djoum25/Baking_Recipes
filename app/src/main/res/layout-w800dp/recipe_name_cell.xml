@@ -13,22 +13,23 @@
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_16"
-        android:layout_marginRight="@dimen/margin_16"
-        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginRight="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_16"
         android:onClick="@{() -> iMainActivity.onRecipeNameClick(recipe)}">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:fontFamily="casual"
-            android:gravity="end|center"
+            android:gravity="center"
             android:padding="@dimen/margin_16"
             android:text="@{recipe.name}"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="48sp"
             android:textStyle="bold"
             android:typeface="serif"/>
 

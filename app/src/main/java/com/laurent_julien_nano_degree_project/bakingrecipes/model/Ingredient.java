@@ -5,34 +5,53 @@ import android.os.Parcelable;
 
 public class Ingredient implements Parcelable {
 
+    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel (Parcel source) {
+            return new Ingredient(source);
+        }
+
+        @Override
+        public Ingredient[] newArray (int size) {
+            return new Ingredient[size];
+        }
+    };
     private float quantity;
     private String measure;
     private String ingredient;
 
-    public float getQuantity() {
+    public Ingredient () {
+    }
+
+    protected Ingredient (Parcel in) {
+        this.quantity = in.readFloat();
+        this.measure = in.readString();
+        this.ingredient = in.readString();
+    }
+
+    public float getQuantity () {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity (float quantity) {
         this.quantity = quantity;
     }
 
-    public String getMeasure() {
+    public String getMeasure () {
         return measure;
     }
 
-    public void setMeasure(String measure) {
+    public void setMeasure (String measure) {
         this.measure = measure;
     }
 
-    public String getIngredient() {
+    public String getIngredient () {
         return ingredient;
     }
 
-    public void setIngredient(String ingredient) {
+    public void setIngredient (String ingredient) {
         this.ingredient = ingredient;
     }
-
 
     @Override
     public int describeContents () {
@@ -45,25 +64,4 @@ public class Ingredient implements Parcelable {
         dest.writeString(this.measure);
         dest.writeString(this.ingredient);
     }
-
-    public Ingredient () {
-    }
-
-    protected Ingredient (Parcel in) {
-        this.quantity = in.readFloat();
-        this.measure = in.readString();
-        this.ingredient = in.readString();
-    }
-
-    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
-        @Override
-        public Ingredient createFromParcel (Parcel source) {
-            return new Ingredient(source);
-        }
-
-        @Override
-        public Ingredient[] newArray (int size) {
-            return new Ingredient[size];
-        }
-    };
 }
