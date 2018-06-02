@@ -4,9 +4,10 @@ import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 
 public interface IMainActivity {
-    public void onRecipeNameClick (Recipe recipes);
+    void onRecipeNameClick (Recipe recipes);
 
-    public void onRecipeShortDescriptionClick (Step step);
+    void onRecipeShortDescriptionClick (Step step);
 
-    public void OnRecipeIngredientClick ();
+    void OnRecipeIngredientClick ();
+
 }

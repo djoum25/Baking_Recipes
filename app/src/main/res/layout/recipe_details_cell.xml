@@ -3,7 +3,6 @@
     >
 
     <data>
-
         <variable
             name="step"
             type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Step"/>

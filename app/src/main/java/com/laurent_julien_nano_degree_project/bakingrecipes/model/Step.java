@@ -77,6 +77,9 @@ public class Step implements Parcelable {
         return videoURL.length() > 0;
     }
 
+    public boolean showDescription () {
+        return this.getId() != 0;
+    }
     public boolean hasthumbnail () {
         return thumbnailURL.length() > 0;
     }

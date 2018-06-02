@@ -1,12 +1,13 @@
 package com.laurent_julien_nano_degree_project.bakingrecipes.fragment;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.FragmentRecipeNameListBinding;
@@ -46,7 +47,7 @@ public class RecipeNameList extends Fragment {
             BakingRecipeIntentService.startActionQueryUrl(getContext(), URL_TO_QUERY);
             EventBus.getDefault().register(this);
         } else {
-            Toast.makeText(getContext(), "Device is not conected", Toast.LENGTH_SHORT).show();
+            showNoConnectionMessage();
         }
     }
 
@@ -64,4 +65,17 @@ public class RecipeNameList extends Fragment {
         }
         mBinding.setRecipes(recipes);
     }
+
+    public void showNoConnectionMessage () {
+        mBinding.nameListProgressBar.setVisibility(View.GONE);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.warning)
+            .setMessage(R.string.no_connection)
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick (DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+    }
+
 }

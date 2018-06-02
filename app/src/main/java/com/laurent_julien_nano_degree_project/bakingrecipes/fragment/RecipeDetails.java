@@ -87,7 +87,6 @@ public class RecipeDetails extends Fragment {
 
     public interface RecipeDetailsListener {
         void chosenRecipe (Recipe recipe);
-
         void setToolbarTitle (Recipe recipe);
     }
 }

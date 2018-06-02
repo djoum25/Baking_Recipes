@@ -7,4 +7,9 @@
     <string name="recipe_ingredients">Recipe Ingredients</string>
     <string name="of">of</string>
     <string name="welcome">Wecome to the Baking recipe</string>
+    <string name="warning">Warning</string>
+    <string name="no_connection">No internet connnect</string>
+    <string name="ok">Ok</string>
+    <string name="description">Description</string>
+    <string name="state_save">state_save</string>
 </resources>
