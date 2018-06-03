@@ -10,4 +10,8 @@ public interface IMainActivity {
 
     void OnRecipeIngredientClick ();
 
+    void onNextButtonClick (int actualStepId);
+
+    void onPreviousButtonClick (int actualStepId);
+
 }

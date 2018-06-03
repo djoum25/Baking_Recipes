@@ -12,4 +12,6 @@
     <string name="ok">Ok</string>
     <string name="description">Description</string>
     <string name="state_save">state_save</string>
+    <string name="go_to_previous_step">Go to Previous Step</string>
+    <string name="go_to_next_step">Go to Next Step</string>
 </resources>

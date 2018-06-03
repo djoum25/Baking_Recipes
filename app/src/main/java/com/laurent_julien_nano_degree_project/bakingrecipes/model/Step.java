@@ -84,6 +84,14 @@ public class Step implements Parcelable {
         return thumbnailURL.length() > 0;
     }
 
+    public boolean hasNoThumbnailNorVideo () {
+        return videoURL.length() == 0 && thumbnailURL.length() == 0;
+    }
+
+    public boolean showDescriptionText () {
+        return this.description.length() > 20;
+    }
+
     @Override
     public int describeContents () {
         return 0;

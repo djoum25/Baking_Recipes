@@ -17,7 +17,7 @@ import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 
 public class MainActivity extends AppCompatActivity implements IMainActivity,
     RecipeDetails.RecipeDetailsListener, RecipeIngredientList.IngredientListener,
-    RecipeSteps.RecipeStepsListener {
+    RecipeSteps.RecipeListener {
 
     private static final String TAG = "MainActivity";
     ActivityMainBinding mBinding;
@@ -31,10 +31,9 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         ScreenSizeUtility screenSizeUtility = new ScreenSizeUtility(this);
         mTablet = screenSizeUtility.getWidth() >= 800;
-        // TODO: 5/29/18 rememenber to remove if not working 
         RecipeNameBindingAdapter recipeNameBindingAdapter = new RecipeNameBindingAdapter(this);
 
-        if (mTablet || (savedInstanceState == null)) {
+        if (savedInstanceState == null) {
             initListFragment();
         }
     }
@@ -72,24 +71,27 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
 
     @Override
     public void onRecipeShortDescriptionClick (Step step) {
-        dispRecipeStep(step);
+        displayRecipeStep(step);
     }
 
-    private void dispRecipeStep (Step step) {
-        RecipeSteps recipeSteps;
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        if (step != null) {
-            recipeSteps = RecipeSteps.newInstance(step);
-            if (mTablet) {
-                fragmentManager.beginTransaction()
-                    .replace(R.id.container_details, recipeSteps)
-                    .addToBackStack(null)
-                    .commit();
-            } else {
-                fragmentManager.beginTransaction()
-                    .replace(R.id.container_list, recipeSteps)
-                    .addToBackStack(null)
-                    .commit();
+    @Override
+    public void onNextButtonClick (int actualStepId) {
+        Step stepToDisplay = null;
+        if (actualStepId <= mRecipe.getSteps().size()) {
+            //this line of code is specifici for the yellow
+            // cake recipe which id came jump from 6 to 8
+            // going up
+            if (mRecipe.getName().equals("Yellow Cake") && actualStepId == 6) {
+                actualStepId += 1;
+            }
+            actualStepId += 1;
+            for (Step step : mRecipe.getSteps()) {
+                if (step.getId() == actualStepId) {
+                    stepToDisplay = step;
+                }
+            }
+            if (stepToDisplay != null) {
+                displayRecipeStep(stepToDisplay);
             }
         }
     }
@@ -114,7 +116,44 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         }
     }
 
-    // TODO: 6/1/18 check for crash
+    @Override
+    public void onPreviousButtonClick (int actualStepId) {
+        Step stepToDisplay = null;
+        if (actualStepId > 0) {
+            //this line of code is specifici for the yellow
+            // cake recipe which id came jump from 8 to 6 going down
+            if (mRecipe.getName().equals("Yellow Cake") && actualStepId == 8) {
+                actualStepId -= 1;
+            }
+            actualStepId -= 1;
+            for (Step step : mRecipe.getSteps()) {
+                if (step.getId() == actualStepId) {
+                    stepToDisplay = step;
+                }
+            }
+            if (stepToDisplay != null) {
+                displayRecipeStep(stepToDisplay);
+            }
+        }
+    }
+
+    private void displayRecipeStep (Step step) {
+        RecipeSteps recipeSteps;
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        if (step != null) {
+            recipeSteps = RecipeSteps.newInstance(step);
+            if (mTablet) {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.container_details, recipeSteps)
+                    .commit();
+            } else {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.container_list, recipeSteps)
+                    .commit();
+            }
+        }
+    }
+
     @Override
     protected void onRestoreInstanceState (Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -149,50 +188,18 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         mBinding.toolbar.setTitle(recipe.getName());
     }
 
-
-    // TODO: 6/1/18 method needs to work better 
     @Override
-    public void onPreviousStepClick () {
-        Step stepToDisplay = null;
-        if (mStepToMove > 0) {
-            mStepToMove--;
-            for (Step step : mRecipe.getSteps()) {
-                if (step.getId() == mStepToMove) {
-                    stepToDisplay = step;
-                }
-            }
-
-            if (stepToDisplay != null) {
-                dispRecipeStep(stepToDisplay);
-            }
-        } else {
-            mStepToMove = 0;
-        }
-    }
-
-    // TODO: 6/1/18 method needs to work better 
-    @Override
-    public void onNextStepClick () {
-        Step stepToDisplay = null;
-        if (mStepToMove < mRecipe.getSteps().size()) {
-            mStepToMove++;
-            for (Step step : mRecipe.getSteps()) {
-                if (step.getId() == mStepToMove) {
-                    stepToDisplay = step;
-                }
-            }
-            if (stepToDisplay != null) {
-                dispRecipeStep(stepToDisplay);
-            }
-        } else {
-            mStepToMove = mRecipe.getSteps().size() - 1;
-        }
-
+    public void hideToolBarOnLanscapeMode () {
+        mBinding.toolbar.setVisibility(View.GONE);
     }
 
     @Override
-    public void actualStepId (int actualStepId) {
-        mStepToMove = actualStepId;
+    public void showToolBarOnPortrait () {
+        mBinding.toolbar.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void hideTabletListPane () {
+        mBinding.containerList.setVisibility(View.GONE);
+    }
 }
