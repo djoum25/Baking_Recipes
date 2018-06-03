@@ -31,7 +31,7 @@
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/simpleExoPlayerView"
                 android:layout_width="0dp"
-                android:layout_height="500dp"
+                android:layout_height="300dp"
                 android:background="#000000"
                 android:visibility="@{step.hasVideo() ? View.VISIBLE : View.GONE}"
                 app:controller_layout_id="@layout/custom_player_control"
@@ -139,12 +139,11 @@
             <LinearLayout
                 android:id="@+id/linearLayout2"
                 android:layout_width="0dp"
-                android:layout_height="550dp"
+                android:layout_height="355dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

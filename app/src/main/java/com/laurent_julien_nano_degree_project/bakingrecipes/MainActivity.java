@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         mTablet = screenSizeUtility.getWidth() >= 800;
         RecipeNameBindingAdapter recipeNameBindingAdapter = new RecipeNameBindingAdapter(this);
 
-        if (savedInstanceState == null) {
+        if (mTablet || (savedInstanceState == null)) {
             initListFragment();
         }
     }
