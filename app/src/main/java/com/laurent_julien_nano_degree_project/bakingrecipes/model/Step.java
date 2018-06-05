@@ -61,6 +61,14 @@ public class Step implements Parcelable {
         return videoURL;
     }
 
+    public boolean showPreviousButton () {
+        return id != 0;
+    }
+
+    public boolean showNextButton (int stepSize) {
+        return id != stepSize;
+    }
+
     public void setVideoURL (String videoURL) {
         this.videoURL = videoURL;
     }

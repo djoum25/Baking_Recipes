@@ -21,6 +21,7 @@
         android:onClick="@{() -> iMainActivity.onRecipeNameClick(recipe)}">
 
         <TextView
+            android:id="@+id/recipe_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

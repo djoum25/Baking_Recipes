@@ -25,6 +25,7 @@
         tools:context=".fragment.RecipeIngredientList">
 
         <TextView
+            android:id="@+id/ingredient_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_8"
@@ -35,6 +36,7 @@
             tools:text="List of ingredients to prepare a Nuttella pie"/>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/ingredient_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:setIngredients="@{ingredients}"/>

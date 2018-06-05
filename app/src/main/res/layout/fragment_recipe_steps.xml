@@ -15,6 +15,10 @@
         <variable
             name="iMainActivity"
             type="com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity"/>
+
+        <variable
+            name="size"
+            type="int"/>
     </data>
 
     <ScrollView
@@ -112,12 +116,14 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/ic_skip_previous_black_24dp"
+                android:drawableStart="@drawable/ic_skip_previous_black_24dp"
+                android:visibility="@{step.showPreviousButton() ? View.VISIBLE : View.GONE}"
                 android:background="@android:color/transparent"
                 android:onClick="@{()->iMainActivity.onPreviousButtonClick(step.id)}"
                 android:text="@string/go_to_previous_step"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <Button
                 android:id="@+id/btn_next"
@@ -126,19 +132,22 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="16dp"
+                android:drawableEnd="@drawable/ic_skip_next_black_24dp"
+                android:drawableRight="@drawable/ic_skip_next_black_24dp"
                 android:background="@android:color/transparent"
                 android:onClick="@{()->iMainActivity.onNextButtonClick(step.id)}"
                 android:text="@string/go_to_next_step"
                 app:layout_constraintBottom_toTopOf="@+id/btn_previous"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_previous"
+                android:visibility="@{step.showNextButton(size) ? View.VISIBLE : View.GONE}"
                 app:layout_constraintVertical_bias="0.571"/>
 
             <ProgressBar
                 android:id="@+id/videoProgress"
                 style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
@@ -146,10 +155,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout2"/>
+                android:visibility="@{step.hasVideo() ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@+id/simpleExoPlayerView"
+                app:layout_constraintEnd_toEndOf="@+id/simpleExoPlayerView"
+                app:layout_constraintStart_toStartOf="@+id/simpleExoPlayerView"
+                app:layout_constraintTop_toTopOf="@+id/simpleExoPlayerView"/>
 
             <LinearLayout
                 android:id="@+id/linearLayout2"

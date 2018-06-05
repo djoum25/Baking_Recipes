@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         if (actualStepId > 0) {
             //this line of code is specifici for the yellow
             // cake recipe which id came jump from 8 to 6 going down
-            if (mRecipe.getName().equals("Yellow Cake") && actualStepId == 8) {
+            if (mRecipe.getName().equals(getString(R.string.yellow_cake)) && actualStepId == 8) {
                 actualStepId -= 1;
             }
             actualStepId -= 1;
@@ -140,15 +140,25 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
     private void displayRecipeStep (Step step) {
         RecipeSteps recipeSteps;
         final FragmentManager fragmentManager = getSupportFragmentManager();
+        int size = 0;
+        //yellow cake id is different
+        if (mRecipe.getName().equals(getString(R.string.yellow_cake))) {
+            size = mRecipe.getSteps().size();
+        } else {
+            size = (mRecipe.getSteps().size() - 1);
+        }
+
         if (step != null) {
-            recipeSteps = RecipeSteps.newInstance(step);
+            recipeSteps = RecipeSteps.newInstance(step, size);
             if (mTablet) {
                 fragmentManager.beginTransaction()
                     .replace(R.id.container_details, recipeSteps)
+                    .addToBackStack(null)
                     .commit();
             } else {
                 fragmentManager.beginTransaction()
                     .replace(R.id.container_list, recipeSteps)
+                    .addToBackStack(null)
                     .commit();
             }
         }
