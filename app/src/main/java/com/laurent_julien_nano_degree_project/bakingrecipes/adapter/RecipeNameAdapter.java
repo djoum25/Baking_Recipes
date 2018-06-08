@@ -47,10 +47,10 @@ public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.Re
         return mRecipes.size();
     }
 
-    class RecipeBindingHolder extends RecyclerView.ViewHolder {
+    public class RecipeBindingHolder extends RecyclerView.ViewHolder {
         RecipeNameCellBinding mBinding;
 
-        RecipeBindingHolder (View itemView) {
+        public RecipeBindingHolder (View itemView) {
             super(itemView);
             mBinding = DataBindingUtil.bind(itemView);
         }

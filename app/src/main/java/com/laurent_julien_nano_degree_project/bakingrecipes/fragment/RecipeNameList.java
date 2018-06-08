@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeNameList extends Fragment {
-    private static final String URL_TO_QUERY = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
     private List<Recipe> mRecipes = new ArrayList<>();
     private FragmentRecipeNameListBinding mBinding;
 
@@ -44,7 +43,7 @@ public class RecipeNameList extends Fragment {
     public void onStart () {
         super.onStart();
         if (ConnectionStatus.isDeviceConnected(getContext())) {
-            BakingRecipeIntentService.startActionQueryUrl(getContext(), URL_TO_QUERY);
+            BakingRecipeIntentService.startActionQueryUrl(getContext(), getString(R.string.url_to_query));
             EventBus.getDefault().register(this);
         } else {
             showNoConnectionMessage();

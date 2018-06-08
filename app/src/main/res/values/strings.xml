@@ -15,4 +15,5 @@
     <string name="go_to_previous_step">Previous</string>
     <string name="go_to_next_step">Up next</string>
     <string name="yellow_cake">Yellow Cake</string>
+    <string name="url_to_query">https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json</string>
 </resources>

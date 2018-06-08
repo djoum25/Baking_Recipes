@@ -87,7 +87,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return position == 0;
     }
 
-    class RecipeStepsBidingHolder extends RecyclerView.ViewHolder {
+    public class RecipeStepsBidingHolder extends RecyclerView.ViewHolder {
         RecipeDetailsCellBinding mBinding;
 
         RecipeStepsBidingHolder (View itemView) {
@@ -96,7 +96,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    class RecipeStepsHeaderHolder extends RecyclerView.ViewHolder {
+    public class RecipeStepsHeaderHolder extends RecyclerView.ViewHolder {
         RecipeDetailsCellHeaderBinding mBinding;
 
         RecipeStepsHeaderHolder (View itemView) {

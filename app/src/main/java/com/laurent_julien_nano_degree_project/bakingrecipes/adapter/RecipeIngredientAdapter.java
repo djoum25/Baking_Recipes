@@ -44,7 +44,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
         return mIngredients.size();
     }
 
-    class IngredientBindingHolder extends RecyclerView.ViewHolder {
+    public class IngredientBindingHolder extends RecyclerView.ViewHolder {
         RecipeIngredientsCellBinding mBinding;
 
         IngredientBindingHolder (View itemView) {
