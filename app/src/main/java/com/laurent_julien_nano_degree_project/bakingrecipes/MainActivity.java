@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.RecipeNameBindingAdapter;
@@ -33,9 +34,24 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         mTablet = screenSizeUtility.getWidth() >= 800;
         RecipeNameBindingAdapter recipeNameBindingAdapter = new RecipeNameBindingAdapter(this);
 
+        setSupportActionBar(mBinding.toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         if (mTablet || (savedInstanceState == null)) {
             initListFragment();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{
+                onBackPressed();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
