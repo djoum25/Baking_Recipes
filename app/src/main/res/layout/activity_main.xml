@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:titleTextAppearance="?android:attr/textAppearanceMedium"
-                app:titleTextColor="@android:color/white"/>
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
