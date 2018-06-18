@@ -2,7 +2,9 @@ package com.laurent_julien_nano_degree_project.bakingrecipes.fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,24 +14,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
-import com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract;
-import com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry;
 import com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsHelper;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.FragmentRecipeIngredientListBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Ingredient;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.*;
+import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.COLUMN_INGREDIENTS;
+import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.COLUMN_MEASURE;
+import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.COLUMN_QUANTITY;
+import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.COLUMN_RECIPE_NAME;
+import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.CONTENT_URI;
 
 
 public class RecipeIngredientList extends Fragment {
-    private RecipeIngredientsHelper mHelper;
+    private static final String TAG = RecipeIngredientList.class.getSimpleName();
 
+    private RecipeIngredientsHelper mHelper;
     private static final String ARG_PARAM1 = "param1";
     FragmentRecipeIngredientListBinding mBinding;
     private Recipe mRecipe;
@@ -67,6 +72,7 @@ public class RecipeIngredientList extends Fragment {
         }
         mHelper = new RecipeIngredientsHelper(getContext());
         setHasOptionsMenu(true);
+        getDataForTestingPurpose();
     }
 
     @Override
@@ -80,7 +86,7 @@ public class RecipeIngredientList extends Fragment {
         switch (item.getItemId()){
             case R.id.add_to_desired_recipe_action:
                 final List<Ingredient> ingredients = mRecipe.getIngredients();
-                 addIngredientsToWidget(ingredients);
+                addIngredientsToWidget(ingredients);
                 return true;
         }
         return false;
@@ -88,7 +94,7 @@ public class RecipeIngredientList extends Fragment {
 
     private void addIngredientsToWidget(List<Ingredient> ingredients){
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        db.execSQL("delete from " + TABLE_NAME);
+        getContext().getContentResolver().delete(CONTENT_URI, null, null);
         ContentValues values = new ContentValues();
         long insert = 0;
         if (ingredients != null){
@@ -97,7 +103,7 @@ public class RecipeIngredientList extends Fragment {
                 values.put(COLUMN_INGREDIENTS, ingredient.getIngredient());
                 values.put(COLUMN_QUANTITY, ingredient.getQuantity());
                 values.put(COLUMN_MEASURE, ingredient.getMeasure());
-                insert += db.insert(TABLE_NAME, null, values);
+                final Uri result = getContext().getContentResolver().insert(CONTENT_URI, values);
             }
         }
     }
@@ -107,13 +113,11 @@ public class RecipeIngredientList extends Fragment {
         if (mHelper != null)
             mHelper.close();
         super.onDestroy();
-
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-
         mBinding = FragmentRecipeIngredientListBinding.inflate(inflater);
         return mBinding.getRoot();
     }
@@ -135,5 +139,28 @@ public class RecipeIngredientList extends Fragment {
     }
 
     public interface IngredientListener {
+    }
+
+    public void getDataForTestingPurpose () {
+        List<Ingredient> ingredients = new ArrayList<>();
+        Log.d(TAG, "getDataForTestingPurpose is called");
+        String[] projection = {COLUMN_INGREDIENTS, COLUMN_QUANTITY, COLUMN_MEASURE};
+        final Cursor query = getContext().getContentResolver().query(CONTENT_URI,
+            projection, null, null, null, null);
+
+        if (query != null) {
+            while (query.moveToNext()) {
+                ingredients.add(new Ingredient(
+                    query.getString(query.getColumnIndexOrThrow(COLUMN_INGREDIENTS)),
+                    query.getString(query.getColumnIndexOrThrow(COLUMN_MEASURE)),
+                    query.getFloat(query.getColumnIndexOrThrow(COLUMN_QUANTITY))
+                ));
+            }
+        }
+        for (Ingredient ingredient : ingredients) {
+            Log.d(TAG, "getDataForTestingPurpose " + ingredient.getIngredient() + "\t" +
+                ingredient.getQuantity() + "\t" + ingredient.getMeasure());
+        }
+
     }
 }

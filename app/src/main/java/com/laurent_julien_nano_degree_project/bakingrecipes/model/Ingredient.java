@@ -20,6 +20,12 @@ public class Ingredient implements Parcelable {
     private String measure;
     private String ingredient;
 
+    public Ingredient (String ingredient, String measure, float quantity) {
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
+    }
+
     public Ingredient () {
     }
 
