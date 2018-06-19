@@ -72,7 +72,6 @@ public class RecipeIngredientList extends Fragment {
         }
         mHelper = new RecipeIngredientsHelper(getContext());
         setHasOptionsMenu(true);
-        getDataForTestingPurpose();
     }
 
     @Override
@@ -141,13 +140,12 @@ public class RecipeIngredientList extends Fragment {
     public interface IngredientListener {
     }
 
-    public void getDataForTestingPurpose () {
+    public static List<Ingredient> getIngredientFromDb (Context context) {
         List<Ingredient> ingredients = new ArrayList<>();
         Log.d(TAG, "getDataForTestingPurpose is called");
         String[] projection = {COLUMN_INGREDIENTS, COLUMN_QUANTITY, COLUMN_MEASURE};
-        final Cursor query = getContext().getContentResolver().query(CONTENT_URI,
+        final Cursor query = context.getContentResolver().query(CONTENT_URI,
             projection, null, null, null, null);
-
         if (query != null) {
             while (query.moveToNext()) {
                 ingredients.add(new Ingredient(
@@ -157,10 +155,8 @@ public class RecipeIngredientList extends Fragment {
                 ));
             }
         }
-        for (Ingredient ingredient : ingredients) {
-            Log.d(TAG, "getDataForTestingPurpose " + ingredient.getIngredient() + "\t" +
-                ingredient.getQuantity() + "\t" + ingredient.getMeasure());
-        }
-
+        if (query != null)
+            query.close();
+        return ingredients;
     }
 }
