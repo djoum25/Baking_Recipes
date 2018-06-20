@@ -20,6 +20,7 @@ import com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngre
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.FragmentRecipeIngredientListBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Ingredient;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
+import com.laurent_julien_nano_degree_project.bakingrecipes.widget.RecipeWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,9 @@ public class RecipeIngredientList extends Fragment {
             case R.id.add_to_desired_recipe_action:
                 final List<Ingredient> ingredients = mRecipe.getIngredients();
                 addIngredientsToWidget(ingredients);
+
+                // TODO: 6/19/18 may need to be removed 
+                RecipeWidgetProvider.refresh(getContext());
                 return true;
         }
         return false;

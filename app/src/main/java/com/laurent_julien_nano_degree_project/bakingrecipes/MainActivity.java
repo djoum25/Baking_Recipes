@@ -4,10 +4,12 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.RecipeNameBindingAdapter;
+import com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.ActivityMainBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeDetails;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeIngredientList;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         if (mTablet || (savedInstanceState == null)) {
             initListFragment();
         }
+
+        Log.d(TAG, "onCreate: " + RecipeIngredientsContract.IngredientEntry.CONTENT_URI);
     }
 
     @Override

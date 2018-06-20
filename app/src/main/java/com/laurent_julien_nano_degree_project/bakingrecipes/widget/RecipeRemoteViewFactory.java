@@ -2,16 +2,13 @@ package com.laurent_julien_nano_degree_project.bakingrecipes.widget;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Binder;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract;
-import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeIngredientList;
-import com.laurent_julien_nano_degree_project.bakingrecipes.model.Ingredient;
-
-import java.util.List;
 
 import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.COLUMN_INGREDIENTS;
 import static com.laurent_julien_nano_degree_project.bakingrecipes.database.RecipeIngredientsContract.IngredientEntry.COLUMN_MEASURE;
@@ -22,16 +19,10 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
     private static final String TAG = RecipeRemoteViewFactory.class.getSimpleName();
     private Context mContext;
     private Cursor mCursor;
-    private List<Ingredient> mIngredients;
 
 
     public RecipeRemoteViewFactory (Context context) {
         mContext = context;
-        mIngredients = RecipeIngredientList.getIngredientFromDb(mContext);
-
-        for (Ingredient ingredient : mIngredients) {
-            Log.d(TAG, "RecipeRemoteViewFactory: " + ingredient.getIngredient());
-        }
     }
 
     @Override
@@ -40,7 +31,9 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onDataSetChanged () {
-        //if (mCursor != null) mCursor.close();
+        if (mCursor != null) mCursor.close();
+        final long token = Binder.clearCallingIdentity();
+
         mCursor = mContext.getContentResolver().query(
             CONTENT_URI,
             null,
@@ -48,11 +41,14 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
             null,
             null);
         Log.d(TAG, "onDataSetChanged: " + CONTENT_URI);
+
+        Binder.restoreCallingIdentity(token);
     }
 
     @Override
     public void onDestroy () {
-        mCursor.close();
+        if (mCursor != null)
+            mCursor.close();
     }
 
     @Override
@@ -62,19 +58,21 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public RemoteViews getViewAt (int position) {
-        if (mCursor == null || mCursor.getCount() == 0) return null;
-        mCursor.moveToPosition(position);
+
+        if (position == -1 || mCursor == null ||
+            mCursor.getCount() == 0 || !mCursor.moveToPosition(position)) return null;
+        //mCursor.moveToPosition(position);
+
         long ingredientId = mCursor.getLong(
             mCursor.getColumnIndexOrThrow(RecipeIngredientsContract.IngredientEntry._ID));
         String ingredient = mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_INGREDIENTS));
         String measure = mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_MEASURE));
         float quantity = mCursor.getFloat(mCursor.getColumnIndexOrThrow(COLUMN_QUANTITY));
 
-
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_layout_cell);
         views.setTextViewText(R.id.tvIngredient, ingredient);
-        views.setTextViewText(R.id.tvMeasure, measure);
-        views.setTextViewText(R.id.quantity, String.valueOf(quantity));
+        //views.setTextViewText(R.id.tvMeasure, measure);
+        //views.setTextViewText(R.id.quantity, (CharSequence) String.valueOf(quantity));
         return views;
     }
 
@@ -90,7 +88,7 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public long getItemId (int position) {
-        return position;
+        return mCursor.moveToPosition(position) ? mCursor.getLong(0) : position;
     }
 
     @Override

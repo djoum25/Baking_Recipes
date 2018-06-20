@@ -27,9 +27,8 @@
         </service>
         <service
             android:name=".widget.RecipeWidgetService"
-            android:exported="false"/>
-
-        <!-- TODO COME BACK TO FIX -->
+            android:permission="android.permission.BIND_REMOTEVIEWS">
+        </service>
 
         <receiver android:name=".widget.RecipeWidgetProvider">
             <intent-filter>
