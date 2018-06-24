@@ -9,13 +9,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.RecipeNameBindingAdapter;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.ActivityDetailsBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeDetailsFragment;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeStepsFragment;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 
-public class ActivityDetails extends AppCompatActivity implements IMainActivity, RecipeDetailsFragment.RecipeDetailsListener {
+public class ActivityDetails extends AppCompatActivity
+    implements IMainActivity,
+    RecipeDetailsFragment.RecipeDetailsListener,
+    RecipeStepsFragment.RecipeListener {
 
     private static final String TAG = ActivityDetails.class.getSimpleName();
     private Recipe mRecipe;
@@ -26,6 +30,8 @@ public class ActivityDetails extends AppCompatActivity implements IMainActivity,
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_details);
+        RecipeNameBindingAdapter nameBindingAdapter =
+            new RecipeNameBindingAdapter(ActivityDetails.this);
         if (mBinding.details != null &&
             mBinding.details.getVisibility() == View.VISIBLE) {
             isDualPane = true;
@@ -41,13 +47,13 @@ public class ActivityDetails extends AppCompatActivity implements IMainActivity,
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Log.d(TAG, "onCreate");
+
     }
 
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.state_save), mRecipe);
-        Log.d(TAG, "onSaveInstanceState: ");
     }
 
     public void init (Bundle saveInstanceState) {
@@ -70,8 +76,6 @@ public class ActivityDetails extends AppCompatActivity implements IMainActivity,
                 .addToBackStack(null)
                 .commit();
         }
-
-        Log.d(TAG, "init");
     }
 
     @Override
@@ -187,6 +191,13 @@ public class ActivityDetails extends AppCompatActivity implements IMainActivity,
             if (backStackEntryCount > 2)
                 getSupportFragmentManager().popBackStack();
             else NavUtils.navigateUpFromSameTask(this);
+        }
+    }
+
+    @Override
+    public void hideToolBarOnLanscapeMode () {
+        if (mBinding.toolbarActivityDetails != null && !isDualPane) {
+            mBinding.toolbarActivityDetails.setVisibility(View.GONE);
         }
     }
 }

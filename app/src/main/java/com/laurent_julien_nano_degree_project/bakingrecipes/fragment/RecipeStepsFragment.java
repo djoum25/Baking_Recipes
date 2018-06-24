@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
@@ -49,7 +50,7 @@ public class RecipeStepsFragment extends Fragment {
     private DefaultBandwidthMeter mBandwidthMeter = new DefaultBandwidthMeter();
     private long playBackPosition;
     private int currentWindow;
-    private boolean playWhenReady;
+    private boolean playWhenReady = true;
     private Step mStepParam;
     private String mVideoURL;
     private ComponentListener mComponentListener;
@@ -59,7 +60,9 @@ public class RecipeStepsFragment extends Fragment {
     private boolean mMTablet;
     private int mStepSize;
     private boolean mPlayer_state;
-    private boolean mPlayWhenReady = true;
+    private boolean mPlayWhenReady;
+    private long mCurrentPosition;
+    private boolean mWhenReady;
 
     public RecipeStepsFragment () {
         // Required empty public constructor
@@ -77,11 +80,11 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onAttach (Context context) {
         super.onAttach(context);
-//        try {
-//            mListener = (RecipeListener) context;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException("should implement " + context);
-//        }
+        try {
+            mListener = (RecipeListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("should implement " + context);
+        }
     }
 
     @Override
@@ -130,6 +133,7 @@ public class RecipeStepsFragment extends Fragment {
         super.onResume();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             hideSystemui();
+            mListener.hideToolBarOnLanscapeMode();
         }
         if (Util.SDK_INT <= 23 || player == null) {
             initPlayer();
@@ -146,6 +150,10 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onPause () {
         super.onPause();
+        if (playBackPosition == 0) {
+            playBackPosition = player.getCurrentPosition();
+        }
+        playWhenReady = player.getPlayWhenReady();
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -210,6 +218,8 @@ public class RecipeStepsFragment extends Fragment {
         player.seekTo(currentWindow, playBackPosition);
         MediaSource mediaSource = buildMediaSource(Uri.parse(mVideoURL));
         player.prepare(mediaSource, false, false);
+
+        Log.d(TAG, "initPlayer " + playBackPosition + " and " + playWhenReady);
     }
 
     private MediaSource buildMediaSource (Uri parse) {
@@ -219,10 +229,6 @@ public class RecipeStepsFragment extends Fragment {
 
     public interface RecipeListener {
         void hideToolBarOnLanscapeMode ();
-
-        void showToolBarOnPortrait ();
-
-        void hideTabletListPane ();
     }
 
     /**
@@ -260,6 +266,7 @@ public class RecipeStepsFragment extends Fragment {
                     break;
                 case ExoPlayer.STATE_ENDED:
                     state = "ended";
+                    mBinding.videoProgress.setVisibility(View.GONE);
                     break;
                 default:
                     state = "Unknown state";

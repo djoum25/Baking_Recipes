@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import com.laurent_julien_nano_degree_project.bakingrecipes.MainActivity;
+import com.laurent_julien_nano_degree_project.bakingrecipes.ActivityDetails;
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 
 /**
@@ -35,7 +35,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, RecipeWidgetService.class);
         views.setRemoteAdapter(R.id.widget_list, intent);
 
-        Intent appIntent = new Intent(context, MainActivity.class);
+        Intent appIntent = new Intent(context, ActivityDetails.class);
         PendingIntent appPendingIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.widget_empty_view, appPendingIntent);
@@ -65,7 +65,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
 
-            Intent openActivityIntent = new Intent(context, MainActivity.class);
+            Intent openActivityIntent = new Intent(context, ActivityDetails.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 0, openActivityIntent, 0);
             views.setOnClickPendingIntent(R.id.widget_ingredient_title, pendingIntent);

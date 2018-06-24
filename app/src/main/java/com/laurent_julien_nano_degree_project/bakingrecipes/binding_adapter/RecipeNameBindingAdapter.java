@@ -6,6 +6,7 @@ import android.databinding.BindingAdapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.laurent_julien_nano_degree_project.bakingrecipes.ScreenSizeUtility;
 import com.laurent_julien_nano_degree_project.bakingrecipes.adapter.RecipeNameAdapter;
@@ -16,11 +17,13 @@ import java.util.List;
 
 public class RecipeNameBindingAdapter {
     private static final int NUM_COL = 2;
+    private static final String TAG = RecipeNameBindingAdapter.class.getSimpleName();
     private static float size;
 
     public RecipeNameBindingAdapter (Activity activity) {
         ScreenSizeUtility screenSizeUtility = new ScreenSizeUtility(activity);
         size = screenSizeUtility.getWidth();
+        Log.d(TAG, "RecipeNameBindingAdapter: this is size" + size);
     }
 
     @BindingAdapter("recipelist")

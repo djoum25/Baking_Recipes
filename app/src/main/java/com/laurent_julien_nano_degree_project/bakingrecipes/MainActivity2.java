@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.BitmapForBackGround;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.ActivityMain2Binding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 import com.laurent_julien_nano_degree_project.bakingrecipes.networkUtil.ConnectionStatus;
@@ -27,6 +28,8 @@ public class MainActivity2 extends AppCompatActivity implements IMainActivity2 {
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main2);
+
+        BitmapForBackGround bitmapForBackGround = new BitmapForBackGround(this);
     }
 
     @Override
