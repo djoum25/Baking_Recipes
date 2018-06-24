@@ -3,82 +3,81 @@ package com.laurent_julien_nano_degree_project.bakingrecipes;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.RecipeNameBindingAdapter;
-import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.ActivityMainBinding;
+import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.ActivityDetailsBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeDetailsFragment;
-import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeIngredientListFragment;
-import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeNameListFragment;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeStepsFragment;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 
-public class MainActivity extends AppCompatActivity implements IMainActivity,
-    RecipeDetailsFragment.RecipeDetailsListener, RecipeIngredientListFragment.IngredientListener,
-    RecipeStepsFragment.RecipeListener {
+public class ActivityDetails extends AppCompatActivity implements IMainActivity, RecipeDetailsFragment.RecipeDetailsListener {
 
-    private static final String TAG = "MainActivity";
-    private ActivityMainBinding mBinding;
-    private Recipe mRecipe, saveRecipe;
-    private boolean mTablet;
-    private int mStepToMove;
+    private static final String TAG = ActivityDetails.class.getSimpleName();
+    private Recipe mRecipe;
+    private ActivityDetailsBinding mBinding;
+    private boolean isDualPane;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        ScreenSizeUtility screenSizeUtility = new ScreenSizeUtility(this);
-        mTablet = screenSizeUtility.getWidth() >= 800;
-        RecipeNameBindingAdapter recipeNameBindingAdapter = new RecipeNameBindingAdapter(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_details);
+        if (mBinding.details != null &&
+            mBinding.details.getVisibility() == View.VISIBLE) {
+            isDualPane = true;
+        }
 
-        setSupportActionBar(mBinding.toolbar);
+        mRecipe = getIntent().getParcelableExtra(getString(R.string.recipe_extra_key));
+        if (mRecipe != null) {
+            mBinding.setRecipe(mRecipe);
+            init(savedInstanceState);
+        }
+
+        setSupportActionBar(mBinding.toolbarActivityDetails);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState != null) {
-            mRecipe = savedInstanceState.getParcelable(getString(R.string.state_save));
-        }
-        initListFragment();
+        Log.d(TAG, "onCreate");
     }
 
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.state_save), mRecipe);
+        Log.d(TAG, "onSaveInstanceState: ");
     }
 
-    private void initListFragment () {
-        RecipeNameListFragment nameList = new RecipeNameListFragment();
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.container_list, nameList)
-            .commit();
-    }
+    public void init (Bundle saveInstanceState) {
+        if (saveInstanceState != null)
+            return;
+        int size = mRecipe.getSteps().size();
+        Step step = mRecipe.getSteps().get(0);
+        RecipeDetailsFragment detailsFragment = RecipeDetailsFragment.newInstance(mRecipe);
 
-    private void attachRecipeDetailFragment (Recipe recipe) {
-        RecipeDetailsFragment recipeDetails = RecipeDetailsFragment.newInstance(recipe);
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        if (mTablet) {
-            mBinding.containerDetails.setVisibility(View.VISIBLE);
-        }
-        fragmentManager.beginTransaction()
-            .replace(R.id.container_list, recipeDetails)
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.detail_list, detailsFragment)
             .addToBackStack(null)
             .commit();
-    }
 
-//    @Override
-//    public void onRecipeNameClick (Recipe recipes) {
-//        attachRecipeDetailFragment(recipes);
-//    }
+        if (isDualPane) {
+            RecipeStepsFragment stepsFragment =
+                RecipeStepsFragment.newInstance(step, size);
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.details, stepsFragment)
+                .addToBackStack(null)
+                .commit();
+        }
+
+        Log.d(TAG, "init");
+    }
 
     @Override
     public void onRecipeShortDescriptionClick (Step step) {
         displayRecipeStep(step);
     }
-
 
     @Override
     public void onNextButtonClick (int actualStepId) {
@@ -136,14 +135,14 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
 
         if (step != null) {
             recipeSteps = RecipeStepsFragment.newInstance(step, size);
-            if (mTablet) {
+            if (isDualPane) {
                 fragmentManager.beginTransaction()
-                    .replace(R.id.container_details, recipeSteps)
+                    .replace(R.id.details, recipeSteps)
                     .addToBackStack(null)
                     .commit();
             } else {
                 fragmentManager.beginTransaction()
-                    .replace(R.id.container_list, recipeSteps)
+                    .replace(R.id.detail_list, recipeSteps)
                     .addToBackStack(null)
                     .commit();
             }
@@ -154,35 +153,17 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
     protected void onRestoreInstanceState (Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mRecipe = savedInstanceState.getParcelable(getString(R.string.state_save));
+        Log.d(TAG, "onRestoreInstanceState: ");
     }
 
     @Override
     public boolean onOptionsItemSelected (MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
+            case android.R.id.home:
+                removeBackStack();
                 return true;
-            }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed () {
-        final int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-        if (backStackEntryCount >= 2) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            if (mTablet)
-                mBinding.containerDetails.setVisibility(View.GONE);
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onResume () {
-        super.onResume();
-        mBinding.toolbar.setTitle(getString(R.string.app_name));
     }
 
     @Override
@@ -190,19 +171,22 @@ public class MainActivity extends AppCompatActivity implements IMainActivity,
         mRecipe = recipe;
     }
 
-
     @Override
-    public void hideToolBarOnLanscapeMode () {
-        mBinding.toolbar.setVisibility(View.GONE);
+    public void onBackPressed () {
+        removeBackStack();
     }
 
-    @Override
-    public void showToolBarOnPortrait () {
-        mBinding.toolbar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideTabletListPane () {
-        mBinding.containerList.setVisibility(View.GONE);
+    private void removeBackStack () {
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (!isDualPane) {
+            if (backStackEntryCount > 1)
+                getSupportFragmentManager().popBackStack();
+            else
+                NavUtils.navigateUpFromSameTask(this);
+        } else {
+            if (backStackEntryCount > 2)
+                getSupportFragmentManager().popBackStack();
+            else NavUtils.navigateUpFromSameTask(this);
+        }
     }
 }

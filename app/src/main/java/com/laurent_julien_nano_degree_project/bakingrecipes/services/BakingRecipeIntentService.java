@@ -15,23 +15,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
- */
 public class BakingRecipeIntentService extends IntentService {
 
-    private static final String QUERY_MAIN_URL = "com.laurent_julien_nano_degree_project.bakingrecipes.services.action.query_main_url";
-    private static final String EXTRA_MAIN_URL_PARAM = "com.laurent_julien_nano_degree_project.bakingrecipes.services.extra.main_url";
-    private static final String TAG = "TEST";
+    private static final String QUERY_MAIN_URL = "com.laurent_julien_nano_degree_project" +
+        ".bakingrecipes.services.action.query_main_url";
+    private static final String EXTRA_MAIN_URL_PARAM = "com.laurent_julien_nano_degree_project" +
+        ".bakingrecipes.services.extra.main_url";
+    private static final String TAG = BakingRecipeIntentService.class.getSimpleName();
 
     public BakingRecipeIntentService () {
         super("BakingRecipeIntentService");
     }
-
 
     public static void startActionQueryUrl (Context context, String url) {
         Intent intent = new Intent(context, BakingRecipeIntentService.class);

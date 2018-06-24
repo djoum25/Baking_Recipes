@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:titleTextAppearance="?android:attr/textAppearanceMedium"/>
+                app:titleTextAppearance="?android:attr/textAppearanceLarge"/>
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
@@ -35,6 +35,17 @@
                 tools:context=".MainActivity">
             </FrameLayout>
 
+            <FrameLayout
+                android:id="@+id/container_details"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1.5"
+                android:visibility="gone"
+                tools:context=".MainActivity">
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 </layout>

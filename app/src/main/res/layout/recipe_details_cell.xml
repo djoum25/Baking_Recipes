@@ -3,6 +3,7 @@
     >
 
     <data>
+
         <variable
             name="step"
             type="com.laurent_julien_nano_degree_project.bakingrecipes.model.Step"/>
@@ -12,11 +13,11 @@
             type="com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity"/>
     </data>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{()->iMainActivity.onRecipeShortDescriptionClick(step)}"
-        android:orientation="horizontal">
+        android:layout_marginBottom="4dp">
 
         <TextView
             android:id="@+id/recipe_step_short_description"
@@ -30,5 +31,5 @@
             android:textSize="18sp"
             android:textStyle="normal"/>
 
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 </layout>

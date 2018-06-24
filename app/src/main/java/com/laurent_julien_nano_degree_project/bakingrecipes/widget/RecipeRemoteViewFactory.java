@@ -3,7 +3,6 @@ package com.laurent_julien_nano_degree_project.bakingrecipes.widget;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Binder;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -33,15 +32,12 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
     public void onDataSetChanged () {
         if (mCursor != null) mCursor.close();
         final long token = Binder.clearCallingIdentity();
-
         mCursor = mContext.getContentResolver().query(
             CONTENT_URI,
             null,
             null,
             null,
             null);
-        Log.d(TAG, "onDataSetChanged: " + CONTENT_URI);
-
         Binder.restoreCallingIdentity(token);
     }
 
@@ -61,7 +57,6 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
         if (position == -1 || mCursor == null ||
             mCursor.getCount() == 0 || !mCursor.moveToPosition(position)) return null;
-        //mCursor.moveToPosition(position);
 
         long ingredientId = mCursor.getLong(
             mCursor.getColumnIndexOrThrow(RecipeIngredientsContract.IngredientEntry._ID));
@@ -71,8 +66,6 @@ public class RecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_layout_cell);
         views.setTextViewText(R.id.tvIngredient, ingredient);
-        //views.setTextViewText(R.id.tvMeasure, measure);
-        //views.setTextViewText(R.id.quantity, (CharSequence) String.valueOf(quantity));
         return views;
     }
 

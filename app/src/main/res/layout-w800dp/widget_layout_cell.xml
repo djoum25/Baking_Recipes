@@ -24,6 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+
         android:layout_marginRight="8dp"
+        android:textSize="36sp"
         tools:text="Nutella or other chocolate-hazelnut spread"/>
 </LinearLayout>

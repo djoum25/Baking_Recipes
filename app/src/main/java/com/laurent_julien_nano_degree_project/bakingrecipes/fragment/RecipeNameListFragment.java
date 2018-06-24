@@ -22,11 +22,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeNameList extends Fragment {
+public class RecipeNameListFragment extends Fragment {
     private List<Recipe> mRecipes = new ArrayList<>();
     private FragmentRecipeNameListBinding mBinding;
 
-    public RecipeNameList () {
+    public RecipeNameListFragment () {
         // Required empty public constructor
     }
 
@@ -43,7 +43,8 @@ public class RecipeNameList extends Fragment {
     public void onStart () {
         super.onStart();
         if (ConnectionStatus.isDeviceConnected(getContext())) {
-            BakingRecipeIntentService.startActionQueryUrl(getContext(), getString(R.string.url_to_query));
+            BakingRecipeIntentService.startActionQueryUrl(getContext(),
+                getString(R.string.url_to_query));
             EventBus.getDefault().register(this);
         } else {
             showNoConnectionMessage();

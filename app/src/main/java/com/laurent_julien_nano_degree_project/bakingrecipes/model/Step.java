@@ -3,6 +3,8 @@ package com.laurent_julien_nano_degree_project.bakingrecipes.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Locale;
+
 public class Step implements Parcelable {
 
     public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
@@ -25,7 +27,7 @@ public class Step implements Parcelable {
     public Step () {
     }
 
-    protected Step (Parcel in) {
+    Step (Parcel in) {
         this.id = in.readInt();
         this.shortDescription = in.readString();
         this.description = in.readString();
@@ -42,7 +44,7 @@ public class Step implements Parcelable {
     }
 
     public String getShortDescription () {
-        return shortDescription;
+        return String.format(Locale.US, "%d.- %s", id, shortDescription);
     }
 
     public void setShortDescription (String shortDescription) {
@@ -61,16 +63,16 @@ public class Step implements Parcelable {
         return videoURL;
     }
 
+    public void setVideoURL (String videoURL) {
+        this.videoURL = videoURL;
+    }
+
     public boolean showPreviousButton () {
         return id != 0;
     }
 
     public boolean showNextButton (int stepSize) {
         return id != stepSize;
-    }
-
-    public void setVideoURL (String videoURL) {
-        this.videoURL = videoURL;
     }
 
     public String getThumbnailURL () {
@@ -88,6 +90,7 @@ public class Step implements Parcelable {
     public boolean showDescription () {
         return this.getId() != 0;
     }
+
     public boolean hasthumbnail () {
         return thumbnailURL.length() > 0;
     }

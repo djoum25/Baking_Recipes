@@ -43,16 +43,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         return views;
     }
 
-    @Override
-    public void onEnabled (Context context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    @Override
-    public void onDisabled (Context context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
-
     public static void refresh (Context context) {
         Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.setComponent(new ComponentName(context, RecipeWidgetProvider.class));
@@ -84,6 +74,16 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             views.setRemoteAdapter(R.id.widget_list, intent);
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
+    }
+
+    @Override
+    public void onEnabled (Context context) {
+        // Enter relevant functionality for when the first widget is created
+    }
+
+    @Override
+    public void onDisabled (Context context) {
+        // Enter relevant functionality for when the last widget is disabled
     }
 
 }

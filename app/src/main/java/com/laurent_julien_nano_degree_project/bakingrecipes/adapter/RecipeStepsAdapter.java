@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity;
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.RecipeDetailsCellBinding;
-import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.RecipeDetailsCellHeaderBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
  * https://stackoverflow.com/questions/26530685/is-there-an-addheaderview-equivalent-for-recyclerview
  */
 
-public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.RecipeStepsBidingHolder> {
     private static final int HEADER = 0;
     private static final int OTHER = 1;
     private Context mContext;
@@ -36,47 +35,27 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case OTHER:
+    public RecipeStepsBidingHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
+
                 RecipeDetailsCellBinding detailsCellBinding =
                     DataBindingUtil.inflate(LayoutInflater.from(mContext),
                         R.layout.recipe_details_cell, parent, false);
                 return new RecipeStepsBidingHolder(detailsCellBinding.getRoot());
-            case HEADER:
-                RecipeDetailsCellHeaderBinding headerBinding =
-                    DataBindingUtil.inflate(LayoutInflater.from(mContext),
-                        R.layout.recipe_details_cell_header, parent, false);
-                return new RecipeStepsHeaderHolder(headerBinding.getRoot());
-            default:
-                throw new RuntimeException("NO LAYOUT FOUND FOR " + viewType);
-        }
     }
 
     @Override
-    public void onBindViewHolder (@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof RecipeStepsBidingHolder) {
-            Step step = mSteps.get(position - 1);
+    public void onBindViewHolder (@NonNull RecipeStepsBidingHolder holder, int position) {
+        Step step = mSteps.get(position);
             ((RecipeStepsBidingHolder) holder).mBinding.setStep(step);
             ((RecipeStepsBidingHolder) holder).mBinding.setIMainActivity((IMainActivity) mContext);
             ((RecipeStepsBidingHolder) holder).mBinding.executePendingBindings();
-        } else if (holder instanceof RecipeStepsHeaderHolder) {
-            ((RecipeStepsHeaderHolder) holder).mBinding.setIMainActivity((IMainActivity) mContext);
-            ((RecipeStepsHeaderHolder) holder).mBinding.executePendingBindings();
-        }
+
     }
 
-    @Override
-    public int getItemViewType (int position) {
-        if (isHeader(position)) {
-            return HEADER;
-        }
-        return OTHER;
-    }
 
     @Override
     public int getItemCount () {
-        return mSteps.size() + 1;
+        return mSteps.size();
     }
 
     private Step getItem (int position) {
@@ -91,15 +70,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         RecipeDetailsCellBinding mBinding;
 
         RecipeStepsBidingHolder (View itemView) {
-            super(itemView);
-            mBinding = DataBindingUtil.bind(itemView);
-        }
-    }
-
-    public class RecipeStepsHeaderHolder extends RecyclerView.ViewHolder {
-        RecipeDetailsCellHeaderBinding mBinding;
-
-        RecipeStepsHeaderHolder (View itemView) {
             super(itemView);
             mBinding = DataBindingUtil.bind(itemView);
         }

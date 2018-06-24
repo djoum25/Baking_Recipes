@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity;
+import com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity2;
 import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.RecipeNameCellBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
@@ -38,7 +38,7 @@ public class RecipeNameAdapter extends RecyclerView.Adapter<RecipeNameAdapter.Re
     public void onBindViewHolder (@NonNull RecipeBindingHolder holder, int position) {
         Recipe recipe = mRecipes.get(position);
         holder.mBinding.setRecipe(recipe);
-        holder.mBinding.setIMainActivity((IMainActivity) mContext);
+        holder.mBinding.setIMainActivity2((IMainActivity2) mContext);
         holder.mBinding.executePendingBindings();
     }
 

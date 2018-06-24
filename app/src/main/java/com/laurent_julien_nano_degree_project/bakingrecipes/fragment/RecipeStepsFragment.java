@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
@@ -41,17 +40,17 @@ import com.laurent_julien_nano_degree_project.bakingrecipes.IMainActivity;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.FragmentRecipeStepsBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
 
-public class RecipeSteps extends Fragment {
+public class RecipeStepsFragment extends Fragment {
 
     private static final String ARG_STEP = "step_param";
-    private static final String TAG = "RecipeSteps";
+    private static final String TAG = "RecipeStepsFragment";
     private static final String SIZE = "size";
-    FragmentRecipeStepsBinding mBinding;
+    private FragmentRecipeStepsBinding mBinding;
+    private DefaultBandwidthMeter mBandwidthMeter = new DefaultBandwidthMeter();
+    private long playBackPosition;
+    private int currentWindow;
+    private boolean playWhenReady;
     private Step mStepParam;
-    DefaultBandwidthMeter mBandwidthMeter = new DefaultBandwidthMeter();
-    long playBackPosition;
-    int currentWindow;
-    boolean playWhenReady = true;
     private String mVideoURL;
     private ComponentListener mComponentListener;
     private PlayerView playerView;
@@ -59,19 +58,15 @@ public class RecipeSteps extends Fragment {
     private RecipeListener mListener;
     private boolean mMTablet;
     private int mStepSize;
+    private boolean mPlayer_state;
+    private boolean mPlayWhenReady = true;
 
-    @Override
-    public void onAttach (Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (RecipeListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("should implement " + context);
-        }
+    public RecipeStepsFragment () {
+        // Required empty public constructor
     }
 
-    public static RecipeSteps newInstance (Step step, int size) {
-        RecipeSteps fragment = new RecipeSteps();
+    public static RecipeStepsFragment newInstance (Step step, int size) {
+        RecipeStepsFragment fragment = new RecipeStepsFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP, step);
         args.putInt(SIZE, size);
@@ -79,8 +74,14 @@ public class RecipeSteps extends Fragment {
         return fragment;
     }
 
-    public RecipeSteps () {
-        // Required empty public constructor
+    @Override
+    public void onAttach (Context context) {
+        super.onAttach(context);
+//        try {
+//            mListener = (RecipeListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException("should implement " + context);
+//        }
     }
 
     @Override
@@ -108,6 +109,15 @@ public class RecipeSteps extends Fragment {
     }
 
     @Override
+    public void onActivityCreated (@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            playBackPosition = savedInstanceState.getLong("playBackPosition");
+            playWhenReady = savedInstanceState.getBoolean("player_state");
+        }
+    }
+
+    @Override
     public void onStart () {
         super.onStart();
         if (Util.SDK_INT > 23) {
@@ -120,13 +130,17 @@ public class RecipeSteps extends Fragment {
         super.onResume();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             hideSystemui();
-            mListener.hideToolBarOnLanscapeMode();
-        } else {
-            mListener.showToolBarOnPortrait();
         }
         if (Util.SDK_INT <= 23 || player == null) {
             initPlayer();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState (@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("player_state", playWhenReady);
+        outState.putLong("playBackPosition", playBackPosition);
     }
 
     @Override
@@ -146,11 +160,11 @@ public class RecipeSteps extends Fragment {
     }
 
     @Override
-    public void onActivityCreated (@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            playBackPosition = savedInstanceState.getLong("playBackPosition");
-            Log.d(TAG, "onActivityCreated " + playBackPosition);
+    public void onDetach () {
+        super.onDetach();
+        releasePlayer();
+        if (mListener != null) {
+            mListener = null;
         }
     }
 
@@ -179,23 +193,6 @@ public class RecipeSteps extends Fragment {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
-    @Override
-    public void onSaveInstanceState (@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong("playBackPosition", playBackPosition);
-        Log.d(TAG, "onSaveInstanceState " + playBackPosition);
-        Log.d(TAG, "onSaveInstanceState currentwindow " + currentWindow);
-    }
-
-    @Override
-    public void onDetach () {
-        super.onDetach();
-        releasePlayer();
-        if (mListener != null) {
-            mListener = null;
-        }
-    }
-
     //init the player
     private void initPlayer () {
         if (player == null) {
@@ -206,15 +203,13 @@ public class RecipeSteps extends Fragment {
             player.addListener(mComponentListener);
             player.setVideoDebugListener(mComponentListener);
             player.setAudioDebugListener(mComponentListener);
-
             playerView.setPlayer(player);
-            player.setPlayWhenReady(playWhenReady);
-            player.seekTo(currentWindow, playBackPosition);
-            Log.d(TAG, "initPlayer " + playBackPosition);
         }
 
+        player.setPlayWhenReady(playWhenReady);
+        player.seekTo(currentWindow, playBackPosition);
         MediaSource mediaSource = buildMediaSource(Uri.parse(mVideoURL));
-        player.prepare(mediaSource, true, false);
+        player.prepare(mediaSource, false, false);
     }
 
     private MediaSource buildMediaSource (Uri parse) {

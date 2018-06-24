@@ -15,7 +15,7 @@ import java.util.List;
 
 
 public class RecipeNameBindingAdapter {
-    public static final int NUM_COL = 3;
+    private static final int NUM_COL = 2;
     private static float size;
 
     public RecipeNameBindingAdapter (Activity activity) {

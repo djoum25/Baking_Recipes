@@ -19,9 +19,9 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="@string/recipe_ingredients"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#fff"/>
+            android:textColor="#fff"
+            android:textSize="36sp"
+            android:textStyle="bold"/>
     </FrameLayout>
 
     <ListView
