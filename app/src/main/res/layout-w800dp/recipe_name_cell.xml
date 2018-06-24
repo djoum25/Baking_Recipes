@@ -20,8 +20,7 @@
         android:layout_height="350dp"
         android:layout_margin="@dimen/margin_16"
         android:onClick="@{() -> iMainActivity2.onRecipeNameClick(recipe)}"
-
-        app:setBackground="@{recipe}">
+        app:setBackground2="@{recipe}">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -36,7 +35,7 @@
                 android:layout_alignParentBottom="true"
                 android:gravity="start"
                 android:text="@{recipe.name}"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/custom_blue"
                 android:textSize="48sp"
                 android:textStyle="bold"
                 android:typeface="serif"
@@ -49,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="@{String.valueOf(recipe.servings)}"
+                android:text="@{recipe.servingSize()}"
                 android:gravity="center"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/custom_blue"/>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

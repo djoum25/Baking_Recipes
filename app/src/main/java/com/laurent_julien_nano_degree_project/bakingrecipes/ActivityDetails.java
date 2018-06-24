@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter.RecipeNameBindingAdapter;
 import com.laurent_julien_nano_degree_project.bakingrecipes.databinding.ActivityDetailsBinding;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeDetailsFragment;
 import com.laurent_julien_nano_degree_project.bakingrecipes.fragment.RecipeStepsFragment;
@@ -30,8 +29,6 @@ public class ActivityDetails extends AppCompatActivity
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_details);
-        RecipeNameBindingAdapter nameBindingAdapter =
-            new RecipeNameBindingAdapter(ActivityDetails.this);
         if (mBinding.details != null &&
             mBinding.details.getVisibility() == View.VISIBLE) {
             isDualPane = true;

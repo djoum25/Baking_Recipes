@@ -4,7 +4,7 @@
     <string name="of">of</string>
     <string name="welcome">Wecome to the Baking recipe</string>
     <string name="warning">Warning</string>
-    <string name="no_connection">No internet connnect</string>
+    <string name="no_connection">No internet connnection</string>
     <string name="ok">OK</string>
     <string name="description">Description</string>
     <string name="state_save">state_save</string>
@@ -26,4 +26,10 @@
     <string name="loading">Loading....</string>
     <string name="tablet_position">tablet_position</string>
     <string name="tablet_state">tablet_state</string>
+    <string name="no_data_signal">try again</string>
+    <string name="image_nutella_pie">https://assets.epicurious.com/photos/54ac95e819925f464b3ac37e/master/pass/51229210_nutella-pie_1x1.jpg</string>
+    <string name="image_brownies">https://www.village-bakery.com/wp-content/uploads/2017/03/4-3-large-1.jpg</string>
+    <string name="image_yellow_cake">https://www.mastercook.com/app/Image/8086165/2605573.jpg</string>
+    <string name="image_cheecake">https://del.h-cdn.co/assets/16/14/1600x800/landscape-1460046877-delish-strawberry-shortcake-cheesecake.jpg</string>
+    <string name="thumbnail">http://jangler.info/wp-content/uploads/recipie-books-diy-recipe-book-10-minute-transformation-picklee.jpg</string>
 </resources>

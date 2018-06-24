@@ -55,8 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/no_video"
-                        android:visibility="@{step.hasNoThumbnailNorVideo() ? View.VISIBLE : View.GONE}"/>
+                        app:setRecipeStepImage="@{step}"/>
 
                     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                         android:id="@+id/simpleExoPlayerView"

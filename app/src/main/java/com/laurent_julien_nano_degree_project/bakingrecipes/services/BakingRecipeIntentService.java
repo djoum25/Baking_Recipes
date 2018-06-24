@@ -13,7 +13,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BakingRecipeIntentService extends IntentService {
 
@@ -46,7 +45,7 @@ public class BakingRecipeIntentService extends IntentService {
     }
 
     private void handleActionQueryUrl (String url) {
-        List<Recipe> recipesList = new ArrayList<>();
+        ArrayList<Recipe> recipesList = new ArrayList<>();
         try {
             Gson gson = new Gson();
             Recipe[] recipes = gson.fromJson(HttpHelper.connectToUrl(url), Recipe[].class);

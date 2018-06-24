@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Recipe implements Parcelable {
 
@@ -73,6 +74,10 @@ public class Recipe implements Parcelable {
 
     public int getServings () {
         return servings;
+    }
+
+    public String servingSize () {
+        return String.format(Locale.US, "Serving: %d", servings);
     }
 
     public void setServings (int servings) {

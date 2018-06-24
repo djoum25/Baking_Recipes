@@ -2,68 +2,68 @@ package com.laurent_julien_nano_degree_project.bakingrecipes.binding_adapter;
 
 import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
-import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.laurent_julien_nano_degree_project.bakingrecipes.R;
 import com.laurent_julien_nano_degree_project.bakingrecipes.model.Recipe;
-
-import java.util.HashMap;
-
-
-/**
- * this class is credited to Mujtahidah from medium.com
- * and the web address is:
- * https://medium.com/@mujtahidah/get-thumbnail-video-from-url-android-f71533168228
- */
+import com.laurent_julien_nano_degree_project.bakingrecipes.model.Step;
+import com.squareup.picasso.Picasso;
 
 public class BitmapForBackGround {
-    Context mContext;
+    private static final String TAG = BitmapForBackGround.class.getSimpleName();
 
-    public BitmapForBackGround (Context context) {
-        mContext = context;
+    @BindingAdapter("setBackground2")
+    public static void setBackground2 (final View view, Recipe recipe) {
+        final Context context = view.getContext();
+        String myRecipeImage = null;
+        switch (recipe.getName()) {
+            case "Nutella Pie":
+                myRecipeImage = context.getString(R.string.image_nutella_pie);
+                break;
+            case "Brownies":
+                myRecipeImage = context.getString(R.string.image_brownies);
+                break;
+            case "Yellow Cake":
+                myRecipeImage = context.getString(R.string.image_yellow_cake);
+                break;
+            case "Cheesecake":
+                myRecipeImage = context.getString(R.string.image_cheecake);
+                break;
+        }
+
+        Glide.with(context).load(myRecipeImage).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady (@NonNull Drawable resource,
+                                         @Nullable Transition<? super Drawable> transition) {
+                view.setBackground(resource);
+            }
+        });
     }
 
-    @BindingAdapter("setBackground")
-    public static void setBackground (View view, Recipe recipe) {
-
-        int lastVideo = recipe.getSteps().size();
-        String videoURL = recipe.getSteps().get(lastVideo - 1).getVideoURL();
-
-        try {
-            Bitmap bitmap = getThumbNail(videoURL);
-            if (bitmap != null) {
-                bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
-                Drawable drawable = new BitmapDrawable(bitmap);
-                view.setBackground(drawable);
-            }
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+    @BindingAdapter("setRecipeStepImage")
+    public static void setRecipeStepImage (ImageView view, Step step) {
+        loadImage(view, step);
     }
 
-    private static Bitmap getThumbNail (String path) throws Throwable {
-        Bitmap bitmap = null;
-        MediaMetadataRetriever retriever = null;
-
-        try {
-            retriever = new MediaMetadataRetriever();
-            if (Build.VERSION.SDK_INT >= 14) {
-                retriever.setDataSource(path, new HashMap<String, String>());
-            } else {
-                retriever.setDataSource(path);
+    private static void loadImage (ImageView view, Step step) {
+        if (step.getVideoURL().isEmpty()) {
+            String thumbnailUrl = step.getThumbnailURL();
+            if (thumbnailUrl.isEmpty()) {
+                thumbnailUrl = view.getContext().getString(R.string.thumbnail);
             }
-            bitmap = retriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new Throwable("unable to retrieve the thumbnail");
-        } finally {
-            if (retriever != null)
-                retriever.release();
+            Picasso.get().load(thumbnailUrl)
+                .placeholder(R.drawable.custom_background)
+                .error(R.drawable.custom_background)
+                .resize(500, 500)
+                .centerCrop()
+                .into(view);
         }
-        return bitmap;
     }
 }
